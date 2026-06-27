@@ -1,4 +1,39 @@
 
+Dans cet exercice, le code lance un child
+...
+on nous demande un input qui sera stocke dans local_a0
+
+l'enfant est trace par le processus parent
+ptrace() indique que le process va etre trace par son parent
+
+```c
+do {
+    wait(&local_a4);
+    // ...
+    local_18 = ptrace(PTRACE_PEEKUSER, local_14, 0x2c, 0);
+} while (local_18 != 0xb);
+```
+
+Le syscall `0xb` (11) correspond a execve
+
+quand l'appel system 11 est lance dans l'enfant, le process parent kill le process enfant.
+
+
+
+
+
+
+
+
+
+
+
+
+
+on va chercher a overflow le buffer `local_a0` qui n'a que 128 octets de reserve.
+
+
+
 On va exploiter une vulnerabilite au niveau de `gets()`, cette fonction ne protege pas contre les overflow.
 
 Le programme peut recevoir du shellcode mais va bloquer l'utilisation de `execve()` car le process parent tue l'enfant si il execute `execve()`.

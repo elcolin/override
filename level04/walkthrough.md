@@ -21,8 +21,11 @@ quand l'appel system 11 est lance dans l'enfant, le process parent kill le proce
 
 
 
+option gdb pour suivre l'execution de l'enfant:
 
-
+```bash
+set follow-fork-mode child
+```
 
 
 

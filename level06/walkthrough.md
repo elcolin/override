@@ -1,70 +1,69 @@
 
 dans ce programme on nous demande un login et un mot de passe / nombre,
-
-le login on voit qu'il doit faire + de 5 caracteres
+Le login doit faire + de 5 caracteres
+Une fonction determine un serial number a partir de notre login
+Notre password doit correspondre au serial qu'il on trouve a partir de notre login/
 
 ce morceau la : `if(ptrace(0x0, 0x0, 0x1, 0x0) == -1)` protege contre gdb !
-
 ptrace() retourne -1 si le programme est déjà tracé (par gdb par exemple)
 
-une fonction transforme le login en serial number (password)
-
-soit on tente de reverse engineerer la methode de creation de serial number:
-
-```c
-var_2 = login[i] ^ var_1
-var_3 = var_2 * 0x88233b2b >> 32
-var_1 += var_2 - (((((var_2 - var_3) >> 1) + var_3) >> 0xa) * 0x539)
-
- if(serial == var_1)
-```
-
-soit on tente de changer la valeur de retour de ptrace().
-
--> spoiler, c'est ce qu'on fait
+On va quand meme utiliser gdb mais en essayant de skip l'instruction ptrace.
+Apres, on pourra acceder a la valeur serial qui est comparee avec notre password.
 
 ```bash
-gdb ./level06
-```
-```
-disas auth
+(gdb) disas auth
 ...
-0x080487b5 <+109>:	call   0x80485f0 <ptrace@plt>
-0x080487ba <+114>:	cmp    $0xffffffff,%eax
+0x08048791 <+73>:    jmp    0x8048877 <auth+303>
+   0x08048796 <+78>:    movl   $0x0,0xc(%esp)
+   0x0804879e <+86>:    movl   $0x1,0x8(%esp)
+   0x080487a6 <+94>:    movl   $0x0,0x4(%esp)
+   0x080487ae <+102>:   movl   $0x0,(%esp)
+   0x080487b5 <+109>:   call   0x80485f0 <ptrace@plt>
+   0x080487ba <+114>:   cmp    $0xffffffff,%eax
+---Type <return> to continue, or q <return> to quit---r
+   0x080487bd <+117>:   jne    0x80487ed <auth+165>
+   0x080487bf <+119>:   movl   $0x8048a68,(%esp)
+   0x080487c6 <+126>:   call   0x8048590 <puts@plt>
+   0x080487cb <+131>:   movl   $0x8048a8c,(%esp)
+   0x080487d2 <+138>:   call   0x8048590 <puts@plt>
+   0x080487d7 <+143>:   movl   $0x8048ab0,(%esp)
+   0x080487de <+150>:   call   0x8048590 <puts@plt>
+   0x080487e3 <+155>:   mov    $0x1,%eax
+   0x080487e8 <+160>:   jmp    0x8048877 <auth
 ...
+   0x08048866 <+286>:   cmp    -0x10(%ebp),%eax
+---Type <return> to continue, or q <return> to quit---
+   0x08048869 <+289>:   je     0x8048872 <auth+298>
+   0x0804886b <+291>:   mov    $0x1,%eax
+   0x08048870 <+296>:   jmp    0x8048877 <auth+303>
+   0x08048872 <+298>:   mov    $0x0,%eax
+   0x08048877 <+303>:   leave  
+   0x08048878 <+304>:   ret 
 break *0x080487ba
-```
-comme ca on met un breakpoint sur l'instruction juste apres ptrace !
-
-On met aussi un breakpoint au niveau de la comparaison de `var_1` avec notre input.
-
-```
-0x08048866 <+286>:	cmp    -0x10(%ebp),%eax
-0x08048869 <+289>:	je     0x8048872 <auth+298>
-(gdb) break *0x08048866
+run
+...
+set $eax = 0
+break *0x08048866
+continue
+print *(int*)($ebp - 0x10)
+$2 = 6233795
 ```
 
-maintenant on run,
-on met un login genre pcheron (+ de 5 caracteres)
-un serial dont on se fou
+maintenant on a le mot de passe attendu pour le user pcheron
 
 ```bash
-Breakpoint 1, 0x080487ba in auth ()
-(gdb) set $eax=0
-(gdb) c
-Continuing.
-
-Breakpoint 2, 0x08048866 in auth ()
-
-(gdb) info registers eax
-eax            0x7b	123
-
-(gdb) x/wd $ebp-0x10
-0xffffd6a8:	6233795
-
+./level06
+***********************************
+*               level06           *
+***********************************
+-> Enter Login: pcheron
+***********************************
+***** NEW ACCOUNT DETECTED ********
+***********************************
+-> Enter Serial: 6233795
+Authenticated!
+$ cd ..
+$ cd level07
+$ cat .pass
 ```
-
-maintenant on sait que pour le login `pcheron` on sait que le serail correspondant est `6233795`
-
-on lance maintenant le programme avec le meme login et notre nouveau serial (plus besoin de gdb).
 

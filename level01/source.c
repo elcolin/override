@@ -1,219 +1,274 @@
-int32_t _init()
+#include "out.h"
+
+
+undefined main;
+undefined __libc_csu_init;
+undefined __libc_csu_fini;
+undefined1 completed.6159;
+undefined4 dtor_idx.6161;
+undefined1 a_user_name;
+undefined4 stdin;
+
+int _init(EVP_PKEY_CTX *ctx)
+
 {
-    if (__gmon_start__)
-        __gmon_start__();
-    
-    frame_dummy();
-    return __do_global_ctors_aux();
+  int iVar1;
+  
+  __gmon_start__();
+  frame_dummy();
+  iVar1 = __do_global_ctors_aux();
+  return iVar1;
 }
 
-int32_t sub_8048350()
+
+
+void FUN_08048350(void)
+
 {
-    int32_t var_4 = data_8049ff8;
-    /* jump -> data_8049ffc */
+  (*(code *)(undefined *)0x0)();
+  return;
 }
 
-int32_t printf(char const* format, ...)
+
+
+// WARNING: Unknown calling convention -- yet parameter storage is locked
+
+int printf(char *__format,...)
+
 {
-    /* tailcall */
-    return printf();
+  int iVar1;
+  
+  iVar1 = printf(__format);
+  return iVar1;
 }
 
-int32_t sub_8048366()
+
+
+// WARNING: Unknown calling convention -- yet parameter storage is locked
+
+char * fgets(char *__s,int __n,FILE *__stream)
+
 {
-    /* tailcall */
-    return sub_8048350(0);
+  char *pcVar1;
+  
+  pcVar1 = fgets(__s,__n,__stream);
+  return pcVar1;
 }
 
-char* fgets(char* buf, int32_t n, FILE* fp)
+
+
+// WARNING: Unknown calling convention -- yet parameter storage is locked
+
+int puts(char *__s)
+
 {
-    /* tailcall */
-    return fgets(buf, n, fp);
+  int iVar1;
+  
+  iVar1 = puts(__s);
+  return iVar1;
 }
 
-int32_t sub_8048376()
+
+
+void __gmon_start__(void)
+
 {
-    /* tailcall */
-    return sub_8048350(8);
+  __gmon_start__();
+  return;
 }
 
-int32_t puts(char const* str)
+
+
+void __libc_start_main(void)
+
 {
-    /* tailcall */
-    return puts(str);
+  __libc_start_main();
+  return;
 }
 
-int32_t sub_8048386()
+
+
+void processEntry _start(undefined4 param_1,undefined4 param_2)
+
 {
-    /* tailcall */
-    return sub_8048350(0x10);
+  undefined1 auStack_4 [4];
+  
+  __libc_start_main(main,param_2,&stack0x00000004,__libc_csu_init,__libc_csu_fini,param_1,auStack_4)
+  ;
+  do {
+                    // WARNING: Do nothing block with infinite loop
+  } while( true );
 }
 
-int32_t __gmon_start__()
+
+
+// WARNING: Removing unreachable block (ram,0x0804840a)
+// WARNING: Removing unreachable block (ram,0x08048410)
+
+void __do_global_dtors_aux(void)
+
 {
-    /* tailcall */
-    return __gmon_start__();
+  if (completed_6159 == '\0') {
+    completed_6159 = '\x01';
+  }
+  return;
 }
 
-int32_t sub_8048396()
+
+
+// WARNING: Removing unreachable block (ram,0x0804844f)
+// WARNING: Removing unreachable block (ram,0x08048458)
+
+void frame_dummy(void)
+
 {
-    /* tailcall */
-    return sub_8048350(0x18);
+  return;
 }
 
-void __libc_start_main(int32_t (* main)(int32_t argc, char** argv, char** envp), int32_t argc, char** ubp_av, void (* init)(), void (* fini)(), void (* rtld_fini)(), void* stack_end) __noreturn
+
+
+int verify_user_name(void)
+
 {
-    /* tailcall */
-    return __libc_start_main(main, argc, ubp_av, init, fini, rtld_fini, stack_end);
+  int iVar1;
+  byte *pbVar2;
+  byte *pbVar3;
+  undefined1 uVar4;
+  undefined1 uVar5;
+  byte bVar6;
+  
+  bVar6 = 0;
+  uVar4 = &stack0xfffffff4 < (undefined1 *)0x10;
+  uVar5 = &stack0x00000000 == (undefined1 *)0x1c;
+  puts("verifying username....\n");
+  iVar1 = 7;
+  pbVar2 = &a_user_name;
+  pbVar3 = (byte *)"dat_wil";
+  do {
+    if (iVar1 == 0) break;
+    iVar1 = iVar1 + -1;
+    uVar4 = *pbVar2 < *pbVar3;
+    uVar5 = *pbVar2 == *pbVar3;
+    pbVar2 = pbVar2 + (uint)bVar6 * -2 + 1;
+    pbVar3 = pbVar3 + (uint)bVar6 * -2 + 1;
+  } while ((bool)uVar5);
+  return (int)(char)((!(bool)uVar4 && !(bool)uVar5) - uVar4);
 }
 
-int32_t sub_80483a6()
+
+
+int verify_user_pass(byte *param_1)
+
 {
-    /* tailcall */
-    return sub_8048350(0x20);
+  int iVar1;
+  byte *pbVar2;
+  undefined1 in_CF;
+  undefined1 in_ZF;
+  
+  iVar1 = 5;
+  pbVar2 = (byte *)"admin";
+  do {
+    if (iVar1 == 0) break;
+    iVar1 = iVar1 + -1;
+    in_CF = *param_1 < *pbVar2;
+    in_ZF = *param_1 == *pbVar2;
+    param_1 = param_1 + 1;
+    pbVar2 = pbVar2 + 1;
+  } while ((bool)in_ZF);
+  return (int)(char)((!(bool)in_CF && !(bool)in_ZF) - in_CF);
 }
 
-void __convention("regparm") _start(int32_t arg1, void (* arg2)()) __noreturn
-{
-    int32_t stack_end = arg1;
-    void ubp_av;
-    __libc_start_main(main, __return_addr, &ubp_av, __libc_csu_init, __libc_csu_fini, arg2, 
-        &stack_end);
-    /* no return */
-}
+undefined4 main(void)
 
-void __do_global_dtors_aux()
 {
-    if (completed.6159)
-        return;
-    
-    for (uint32_t dtor_idx.6161_1 = dtor_idx.6161; dtor_idx.6161_1 < 0; 
-        dtor_idx.6161_1 = dtor_idx.6161)
-    {
-        dtor_idx.6161 = dtor_idx.6161_1 + 1;
-        __DTOR_LIST__[dtor_idx.6161_1 + 1]();
-    }
-    
-    completed.6159 = 1;
-}
-
-int32_t frame_dummy()
-{
-    int32_t __JCR_END___1 = __JCR_END__;
-    
-    if (!__JCR_END___1)
-        return __JCR_END___1;
-    
-    return 0;
-}
-
-int32_t verify_user_name()
-{
-    int32_t __saved_esi;
-    bool c = &__saved_esi < 0x10; // -> useless
-    bool z = &__saved_esi == 0x10; // -> useless
-    puts("verifying username....\n");
-    int32_t i = 7;
-    char* esi = &a_user_name;
-    char* edi = "dat_wil";
-    
-    while (i)
-    {
-        char temp1_1 = *esi;
-        char temp2_1 = *edi;
-        c = temp1_1 < temp2_1;
-        z = temp1_1 == temp2_1;
-        esi = &esi[1];
-        edi = &edi[1];
-        i -= 1;
-        
-        if (!z)
-            break;
-    }
-    
-    return (!z && !c) - c;
-}
-
-int32_t verify_user_pass(char* arg1)
-{
-    int32_t i = 5;
-    char* esi = arg1;
-    char* edi = "admin";
-    bool c;
-    bool z;
-    
-    while (i)
-    {
-        char temp0_1 = *esi;
-        char temp1_1 = *edi;
-        c = temp0_1 < temp1_1;
-        z = temp0_1 == temp1_1;
-        esi = &esi[1];
-        edi = &edi[1];
-        i -= 1;
-        
-        if (!z)
-            break;
-    }
-    
-    char* edx;
-    edx = !z && !c;
-    return edx - c;
-}
-
-int32_t main(int32_t argc, char** argv, char** envp)
-{
-    void buf;
-    __builtin_memset(&buf, 0, 0x40);
-    int32_t var_14 = 0;
-    puts("********* ADMIN LOGIN PROMPT *********");
-    printf("Enter Username: ");
-    fgets(&a_user_name, 0x100, stdin);
-    
-    if (verify_user_name())
-    {
-        puts("nope, incorrect username...\n");
-        return 1;
-    }
-    
+  undefined4 uVar1;
+  int iVar2;
+  char *pcVar3;
+  char local_54 [64];
+  int local_14;
+  
+  pcVar3 = local_54;
+  for (iVar2 = 0x10; iVar2 != 0; iVar2 = iVar2 + -1) {
+    pcVar3[0] = '\0';
+    pcVar3[1] = '\0';
+    pcVar3[2] = '\0';
+    pcVar3[3] = '\0';
+    pcVar3 = pcVar3 + 4;
+  }
+  local_14 = 0;
+  puts("********* ADMIN LOGIN PROMPT *********");
+  printf("Enter Username: ");
+  fgets(&a_user_name,0x100,stdin);
+  local_14 = verify_user_name();
+  if (local_14 == 0) {
     puts("Enter Password: ");
-    fgets(&buf, 0x64, stdin);
-    int32_t eax_2 = verify_user_pass(&buf);
-    
-    if (eax_2 && !eax_2)
-        return 0;
-    
-    puts("nope, incorrect password...\n");
-    return 1;
+    fgets(local_54,100,stdin);
+    local_14 = verify_user_pass(local_54);
+    if ((local_14 == 0) || (local_14 != 0)) {
+      puts("nope, incorrect password...\n");
+      uVar1 = 1;
+    }
+    else {
+      uVar1 = 0;
+    }
+  }
+  else {
+    puts("nope, incorrect username...\n");
+    uVar1 = 1;
+  }
+  return uVar1;
 }
 
-void __libc_csu_init()
+// WARNING: Function: __i686.get_pc_thunk.bx replaced with injection: get_pc_thunk_bx
+// WARNING: Removing unreachable block (ram,0x080485f0)
+// WARNING: Removing unreachable block (ram,0x080485f8)
+
+void __libc_csu_init(void)
+
 {
-    _init();
+  EVP_PKEY_CTX *in_stack_ffffffd4;
+  
+  _init(in_stack_ffffffd4);
+  return;
 }
 
-void j___libc_csu_fini()
+
+
+void __libc_csu_fini(void)
+
 {
-    /* tailcall */
-    return __libc_csu_fini();
+  return;
 }
 
-void __libc_csu_fini() __pure
+
+
+// WARNING: This is an inlined function
+
+void __i686_get_pc_thunk_bx(void)
+
 {
-    return;
+  return;
 }
 
-int32_t __i686.get_pc_thunk.bx() __pure
+
+
+// WARNING: Removing unreachable block (ram,0x08048651)
+// WARNING: Removing unreachable block (ram,0x08048658)
+
+void __do_global_ctors_aux(void)
+
 {
-    return;
+  return;
 }
 
-int32_t __do_global_ctors_aux()
+
+
+void _fini(void)
+
 {
-    return 0xffffffff;
+  __do_global_dtors_aux();
+  return;
 }
 
-int32_t _fini()
-{
-    return __do_global_dtors_aux();
-}
+
+

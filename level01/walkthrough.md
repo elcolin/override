@@ -8,7 +8,7 @@ Pour le username, c'est simple, en regardant la fonction `verify_user_name()`. n
 
 Pour le password, la fonction verify_user_pass() nous demande d'avoir un password impossible:
 
-```
+```c
 int32_t eax_2 = verify_user_pass(&buf);
 if (eax_2 && !eax_2)
     return 0;
@@ -29,7 +29,7 @@ On commence par trouver les adresses de nos deux input et de return eip.
 On utilise `gdb`.
 
 1 trouver l'adresse de notre premier input:
-```
+```bash
 (gdb) info variables a_user_name
 
 All variables matching regular expression "a_user_name":
@@ -39,7 +39,7 @@ Non-debugging symbols:
 ```
 
 2 trouver les adresses de eip et de notre deuxieme input
-```
+```bash
 (gdb) break verify_user_pass
 ...
 (gdb) info frame
@@ -59,7 +59,7 @@ pour identifier ou est-ce qu'on peut overwrite la valeur d'eip, on va donner cet
 cette chaine overwrite eip avec une adresse invalide, le programme s'en rend compte quand il cherche a utiliser eip de maniere "standard" et nous affiche une erreur avec l'adresse corompue d'eip.
 On decouvre alors a quel endroit on overwrite eip, on va y mettre la dresse de notre shellcode.
 
-```
+```bash
 Program received signal SIGSEGV, Segmentation fault.
 0x75757575 in ?? ()
 ```
